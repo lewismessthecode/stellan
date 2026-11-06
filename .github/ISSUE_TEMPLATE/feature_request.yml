@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Got an idea? We'd love to hear it. For larger features, consider opening a [discussion](https://github.com/boffti/stardash/discussions) first so we can align on scope before you invest time building it.
+        Got an idea? We'd love to hear it. For larger features, consider opening an [issue](https://github.com/lewismessthecode/stellan/issues) first so we can align on scope before you invest time building it.
 
   - type: dropdown
     id: area

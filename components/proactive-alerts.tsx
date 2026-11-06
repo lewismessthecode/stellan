@@ -28,7 +28,7 @@ interface Alert {
   }
 }
 
-const STORAGE_KEY = "stardash_dismissed_alerts"
+const STORAGE_KEY = "trove_dismissed_alerts"
 
 export function ProactiveAlerts({ repos, userId }: ProactiveAlertsProps) {
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set())

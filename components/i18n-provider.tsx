@@ -13,7 +13,7 @@ type I18nContextValue = {
 }
 
 const I18nContext = React.createContext<I18nContextValue | null>(null)
-const STORAGE_KEY = "stardash-language"
+const STORAGE_KEY = "trove-language"
 
 function browserLocale(): Locale {
   return navigator.language.toLowerCase().startsWith("zh") ? "zh-CN" : "en"

@@ -1,14 +1,12 @@
-name: stardash
+name: trove
 
 services:
-  stardash:
-    image: ghcr.io/boffti/stardash:latest
-    # To build from source instead: comment `image`, uncomment `build`.
-    # build: .
+  trove:
+    build: .
     ports:
       - "3000:3000"
     volumes:
-      - stardash-data:/data
+      - trove-data:/data
     environment:
       # Optional. Enables the in-app AI features (categorize, intel, briefs, Discover).
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
@@ -25,4 +23,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  stardash-data:
+  trove-data:

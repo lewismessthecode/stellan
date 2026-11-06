@@ -1,6 +1,6 @@
 import { DatabaseSync } from "node:sqlite"
-import { mkdirSync } from "node:fs"
-import { dirname } from "node:path"
+import { existsSync, mkdirSync, renameSync } from "node:fs"
+import { basename, dirname, join } from "node:path"
 
 // ponytail: node:sqlite + raw SQL. No ORM, no migration tool. Schema is
 // CREATE IF NOT EXISTS; additive changes go in MIGRATIONS below, keyed by
@@ -219,9 +219,26 @@ const MIGRATIONS: string[] = [
   alter table user_starred_repos add column releases_seen_at text;`,
 ]
 
+const DB_FILENAME = "trove.db"
+const LEGACY_DB_FILENAME = "stardash.db"
+
+function adoptLegacyDatabase(path: string) {
+  if (basename(path) !== DB_FILENAME || existsSync(path)) return
+  const legacy = join(dirname(path), LEGACY_DB_FILENAME)
+  if (!existsSync(legacy)) return
+  renameSync(legacy, path)
+  for (const suffix of ["-wal", "-shm"]) {
+    const from = legacy + suffix
+    if (existsSync(from)) renameSync(from, path + suffix)
+  }
+}
+
 function open() {
-  const path = process.env.DATABASE_PATH ?? "./data/stardash.db"
-  if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true })
+  const path = process.env.DATABASE_PATH ?? "./data/trove.db"
+  if (path !== ":memory:") {
+    mkdirSync(dirname(path), { recursive: true })
+    adoptLegacyDatabase(path)
+  }
   const db = new DatabaseSync(path)
   // busy_timeout first: `next build` evaluates routes in parallel workers that all open this file.
   db.exec("pragma busy_timeout = 5000; pragma journal_mode = wal; pragma foreign_keys = on;")
@@ -244,8 +261,8 @@ function open() {
 }
 
 // ponytail: one process, one connection; globalThis survives Next dev HMR.
-const g = globalThis as typeof globalThis & { __stardashDb?: DatabaseSync }
-export const db = (g.__stardashDb ??= open())
+const g = globalThis as typeof globalThis & { __troveDb?: DatabaseSync }
+export const db = (g.__troveDb ??= open())
 
 export const nowIso = () => new Date().toISOString()
 export const toJson = (value: unknown) => JSON.stringify(value ?? null)

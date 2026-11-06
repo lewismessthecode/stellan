@@ -84,7 +84,7 @@ const handler = createMcpHandler(
       async ({ owner, repo }, extra) => text(await starOnGitHub(uid(extra), owner, repo)),
     )
   },
-  { serverInfo: { name: "stardash", version: "1.0.0" } },
+  { serverInfo: { name: "trove", version: "1.0.0" } },
   { basePath: "/api", disableSse: true, maxDuration: 60 },
 )
 
@@ -93,7 +93,7 @@ const authed = withMcpAuth(
   async (_req, bearerToken) => {
     const userId = verifyApiToken(bearerToken)
     if (!userId) return undefined
-    return { token: bearerToken!, clientId: "stardash", scopes: ["stars"], extra: { userId } }
+    return { token: bearerToken!, clientId: "trove", scopes: ["stars"], extra: { userId } }
   },
   { required: true },
 )

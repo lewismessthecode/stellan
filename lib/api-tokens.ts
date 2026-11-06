@@ -2,7 +2,7 @@ import { createHash, randomBytes } from "node:crypto"
 import { db, nowIso } from "@/lib/db"
 
 // Bearer tokens for agents (MCP) and the CLI. Only the sha256 is stored; the plain
-// token is shown once at creation. Mirror of bin/stardash.mjs, keep the two in sync.
+// token is shown once at creation. Mirror of bin/trove.mjs, keep the two in sync.
 const hash = (token: string) => createHash("sha256").update(token).digest("hex")
 
 export interface ApiTokenRow {
@@ -13,7 +13,7 @@ export interface ApiTokenRow {
 }
 
 export function createApiToken(userId: string, name: string) {
-  const token = `sd_${randomBytes(24).toString("hex")}`
+  const token = `trove_${randomBytes(24).toString("hex")}`
   const row = db
     .prepare("insert into api_tokens (user_id, name, token_hash) values (?, ?, ?) returning id")
     .get(userId, name.trim().slice(0, 60) || "token", hash(token)) as { id: string }
@@ -32,7 +32,7 @@ export const revokeApiToken = (userId: string, id: string) =>
 
 /** Resolves a bearer token to its owner, or null. Touches last_used_at. */
 export function verifyApiToken(token: string | undefined | null): string | null {
-  if (!token || !token.startsWith("sd_")) return null
+  if (!token || !token.startsWith("trove_")) return null
   const row = db
     .prepare("update api_tokens set last_used_at = ? where token_hash = ? returning user_id")
     .get(nowIso(), hash(token)) as { user_id: string } | undefined

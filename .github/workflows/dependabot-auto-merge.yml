@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   auto-merge:
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'boffti/stardash'
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'lewismessthecode/stellan'
     runs-on: ubuntu-latest
     steps:
       - id: meta

@@ -585,7 +585,7 @@ function IntelCard({
 }
 
 const LS_TTL = 7 * 24 * 60 * 60 * 1000
-const LS_PREFIX = "stardash-intel:"
+const LS_PREFIX = "trove-intel:"
 
 function getLocalIntel(): RepoIntel[] {
   if (typeof window === "undefined") return []

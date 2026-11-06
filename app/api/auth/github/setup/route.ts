@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { APP_NAME } from "@/lib/brand"
 import { getUser } from "@/lib/auth"
 import { appUrl, getGitHubApp, hasOwner, issueSetupState, manifestFor } from "@/lib/github-app"
 
@@ -19,7 +20,7 @@ export async function GET(request: Request) {
 <body style="font-family:system-ui;display:grid;place-items:center;height:100vh;margin:0;background:#0a0a0a;color:#ddd">
 <form method="post" action="https://github.com/settings/apps/new?state=${issueSetupState()}">
   <input type="hidden" name="manifest" value="${manifest.replace(/"/g, "&quot;")}">
-  <p>Taking you to GitHub to create your own Stellan app…</p>
+  <p>Taking you to GitHub to create your own ${APP_NAME} app…</p>
   <noscript><button type="submit">Continue to GitHub</button></noscript>
 </form>
 <script>document.forms[0].submit()</script>`

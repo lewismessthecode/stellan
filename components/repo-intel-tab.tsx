@@ -378,7 +378,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 const LS_TTL = 7 * 24 * 60 * 60 * 1000
 
 function lsKey(owner: string, name: string) {
-  return `stardash-intel:${owner}/${name}`
+  return `trove-intel:${owner}/${name}`
 }
 
 function lsGet(owner: string, name: string): { intel: RepoIntel; cached: boolean } | null {

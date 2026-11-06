@@ -25,7 +25,7 @@ interface PersonalizedSearchCache {
 }
 
 function personalizedSearchCacheKey(userId: string) {
-  return `stardash-personalized-search-cache-${userId}`
+  return `trove-personalized-search-cache-${userId}`
 }
 
 export function normalizeDiscoverSearchQuery(query: string) {

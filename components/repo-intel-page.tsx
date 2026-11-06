@@ -141,11 +141,11 @@ const INTEL_CACHE_TTL = 7 * 24 * 60 * 60 * 1000
 const HEALTH_CACHE_TTL = 6 * 60 * 60 * 1000
 
 function intelCacheKey(owner: string, name: string) {
-  return `stardash-intel:${owner}/${name}`
+  return `trove-intel:${owner}/${name}`
 }
 
 function healthCacheKey(repoId: number) {
-  return `stardash-intel-health:${repoId}`
+  return `trove-intel-health:${repoId}`
 }
 
 function readLocalCache<T>(key: string, ttl: number): T | null {

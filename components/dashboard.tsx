@@ -96,7 +96,7 @@ import {
 
 import { useI18n } from "@/components/i18n-provider"
 
-const VIEW_MODE_KEY = "stardash_view_mode"
+const VIEW_MODE_KEY = "trove_view_mode"
 const MAX_HEALTH_REPOS_PER_VIEW = 50
 
 export function Dashboard() {
@@ -599,7 +599,7 @@ export function Dashboard() {
       if (!response.ok) throw new Error(result.error || "Failed to categorize")
       const categorizationResult = result as CategorizationResult
       setCategorization(categorizationResult)
-      if (user?.id) localStorage.removeItem(`stardash_categorization_${user.id}`)
+      if (user?.id) localStorage.removeItem(`trove_categorization_${user.id}`)
       await mutateMetadata()
       const categorizedRepoCount =
         categorizationResult.categorizedRepoCount ??

@@ -49,7 +49,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
-          storageKey="stardash-theme"
+          storageKey="trove-theme"
         >
           <I18nProvider>
             <MotionProvider>

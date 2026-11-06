@@ -8,7 +8,7 @@ interface RepoCache {
 }
 
 function cacheKey(userId: string) {
-  return `stardash-repos-cache-${userId}`
+  return `trove-repos-cache-${userId}`
 }
 
 export function getCachedRepos(userId: string): { repos: StarredRepo[]; cachedAt: string } | null {

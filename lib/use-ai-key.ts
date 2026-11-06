@@ -11,8 +11,8 @@ export interface AIKeyConfig {
   baseURL?: string
 }
 
-const STORAGE_KEY = "stardash-ai-key"
-const STORAGE_EVENT = "stardash-ai-key-updated"
+const STORAGE_KEY = "trove-ai-key"
+const STORAGE_EVENT = "trove-ai-key-updated"
 
 let cachedRaw: string | null | undefined
 let cachedConfig: AIKeyConfig | null = null

@@ -1,9 +1,9 @@
 {
-  "name": "stardash",
+  "name": "trove",
   "version": "0.1.0",
   "private": true,
   "bin": {
-    "stardash": "bin/stardash.mjs"
+    "trove": "bin/trove.mjs"
   },
   "packageManager": "pnpm@10.28.2",
   "engines": {

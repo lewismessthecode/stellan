@@ -67,7 +67,6 @@ body:
     attributes:
       label: Deployment
       options:
-        - Hosted app (stardash.dev)
         - Self-hosted (Docker)
         - Local dev
     validations:
