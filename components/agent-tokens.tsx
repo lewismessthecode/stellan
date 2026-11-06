@@ -61,7 +61,7 @@ export function AgentTokens() {
     ? JSON.stringify(
         {
           mcpServers: {
-            stardash: { type: "http", url: mcpUrl, headers: { Authorization: `Bearer ${fresh}` } },
+            trove: { type: "http", url: mcpUrl, headers: { Authorization: `Bearer ${fresh}` } },
           },
         },
         null,

@@ -44,7 +44,7 @@ The database is a local SQLite file via `node:sqlite` (no ORM). The whole schema
 
 ### Deployment
 
-Single container: `Dockerfile` (node:24-slim, Next standalone, SQLite on the `/data` volume), published to `ghcr.io/boffti/stardash` by `.github/workflows/docker.yml` on pushes to main and `v*` tags. `docker-compose.yml` is one service. Nightly jobs run in-process from `lib/scheduler.ts` (started in `instrumentation.ts`, production only unless `SCHEDULER=1`); the cron routes accept `CRON_SECRET` or the per-process secret from `lib/cron-auth.ts`. Not deployed on Vercel; `vercel.json` only carries `ignoreCommand: exit 0`.
+Single container: `Dockerfile` (node:24-slim, Next standalone, SQLite on the `/data` volume), published to `ghcr.io/${{ github.repository }}` by `.github/workflows/docker.yml` on pushes to main and `v*` tags. `docker-compose.yml` is one service. Nightly jobs run in-process from `lib/scheduler.ts` (started in `instrumentation.ts`, production only unless `SCHEDULER=1`); the cron routes accept `CRON_SECRET` or the per-process secret from `lib/cron-auth.ts`. Not deployed on Vercel; `vercel.json` only carries `ignoreCommand: exit 0`.
 
 ### Observability
 
@@ -55,7 +55,7 @@ Single container: `Dockerfile` (node:24-slim, Next standalone, SQLite on the `/d
 
 ## Architecture
 
-**StarDash** is a Next.js 16 (App Router) dashboard for organizing GitHub starred repositories.
+**Trove** is a Next.js 16 (App Router) dashboard for organizing GitHub starred repositories.
 
 **Stack:** Next.js 16.2 + React 19 + TypeScript 5.7 · shadcn/ui (new-york) + Tailwind CSS v4 + Lucide React · Framer Motion · SWR · SQLite via `node:sqlite` (data) + self-created GitHub App OAuth or PAT, signed cookie (auth) · Vercel AI SDK 6 + OpenRouter (cheap default model, `AI_MODEL` env) · Langfuse + Sentry · Recharts + dnd-kit
 
@@ -96,7 +96,7 @@ app/
 
 ### Auth Flow
 
-Single-owner. Two ways in, same tail (`signInWithGitHubToken()` in `lib/github-login.ts`: look up `/user`, enforce that the first GitHub user to sign in owns the instance, store the grant in `profiles`, set the `sd_session` cookie `<userId>.<hmac>` whose secret is minted once into `meta`).
+Single-owner. Two ways in, same tail (`signInWithGitHubToken()` in `lib/github-login.ts`: look up `/user`, enforce that the first GitHub user to sign in owns the instance, store the grant in `profiles`, set the `trove_session` cookie `<userId>.<hmac>` whose secret is minted once into `meta`).
 
 1. **Connect GitHub (default).** `GET /api/auth/github/setup` posts a GitHub App manifest to github.com; the self-hoster clicks "Create GitHub App" and GitHub redirects back to `/api/auth/github/setup/callback` with a code that is converted into `client_id`/`client_secret`, stored in `meta` (`GITHUB_CLIENT_ID`/`GITHUB_CLIENT_SECRET` env override this). `GET /api/auth/github/start` then runs normal OAuth to `/api/auth/github/callback`. App user tokens expire in 8h; `lib/tokens.ts` refreshes them with the stored refresh token. Callback URLs are pinned to the instance origin (`appUrl()`: `APP_URL` env, else forwarded headers).
 2. **Paste a PAT (fallback).** `POST /api/auth/login`. Non-expiring token, no app needed. For headless setups. GitHub.com only: every API call goes to `api.github.com`, so Enterprise Server is not supported.
@@ -114,7 +114,7 @@ Single-owner. Two ways in, same tail (`signInWithGitHubToken()` in `lib/github-l
 
 ### Data Flow
 
-**Starred repos:** `GET /api/github/starred` → `getValidGitHubToken` → `lib/github.ts` (paginates up to 5000 via `vnd.github.star+json`) → `upsertStarredRepos()` in `lib/user-metadata.ts` (one transaction) → cached in `localStorage` (`stardash-repos-cache-{userId}`, 24h TTL).
+**Starred repos:** `GET /api/github/starred` → `getValidGitHubToken` → `lib/github.ts` (paginates up to 5000 via `vnd.github.star+json`) → `upsertStarredRepos()` in `lib/user-metadata.ts` (one transaction) → cached in `localStorage` (`trove-repos-cache-{userId}`, 24h TTL).
 
 **User metadata:** `GET /api/user/metadata` returns tags, collections, per-repo state (status, notes, pinned, assignments) from DB.
 
@@ -133,7 +133,7 @@ Cooldown per user via `profiles.last_ai_categorization_at`. Weekly AI quotas are
 
 ### MCP and CLI
 
-`app/api/mcp/route.ts` wraps `lib/mcp-tools.ts` (pure functions of userId + args) with `mcp-handler` 1.x and `withMcpAuth`; tokens are verified by `lib/api-tokens.ts` (sha256 in `api_tokens`). `bin/stardash.mjs` mints/lists/revokes tokens directly against the SQLite file and prints client config; it hashes the same way, keep both in sync. Radar scoring for the route and the tool lives in `lib/radar-feed.ts`.
+`app/api/mcp/route.ts` wraps `lib/mcp-tools.ts` (pure functions of userId + args) with `mcp-handler` 1.x and `withMcpAuth`; tokens are verified by `lib/api-tokens.ts` (sha256 in `api_tokens`). `bin/trove.mjs` mints/lists/revokes tokens directly against the SQLite file and prints client config; it hashes the same way, keep both in sync. Radar scoring for the route and the tool lives in `lib/radar-feed.ts`.
 
 ### Radar
 
@@ -167,7 +167,7 @@ Inbound feed. Nightly `radar-ingest` pulls candidates from three sources: GitHub
 
 ### UI Stack
 
-shadcn/ui (new-york) in `components/ui/` · Tailwind CSS v4 (`app/globals.css`) · Lucide React (`lucide-react`) · Framer Motion · dark by default (`storageKey: "stardash-theme"`) · `next-themes`
+shadcn/ui (new-york) in `components/ui/` · Tailwind CSS v4 (`app/globals.css`) · Lucide React (`lucide-react`) · Framer Motion · dark by default (`storageKey: "trove-theme"`) · `next-themes`
 
 Custom components: `bento-grid`, `border-beam`, `marquee`, `particles`, `shine-border`, `spinner`, `kbd`, `button-group`, `chart`.
 
@@ -186,7 +186,7 @@ Custom components: `bento-grid`, `border-beam`, `marquee`, `particles`, `shine-b
 ### Environment Variables
 
 ```
-DATABASE_PATH                   # SQLite file, default ./data/stardash.db
+DATABASE_PATH                   # SQLite file, default ./data/trove.db
 
 OPENROUTER_API_KEY
 AI_MODEL                        # Optional OpenRouter model id override (required with AI_BASE_URL)

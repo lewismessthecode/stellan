@@ -252,7 +252,7 @@ function IntelSection({ owner, repoName }: { owner: string; repoName: string }) 
 
 // ─── Contributions section ────────────────────────────────────────────────────
 
-const CONTRIBUTION_CACHE_PREFIX = "stardash-repo-contribution-opportunities-v1"
+const CONTRIBUTION_CACHE_PREFIX = "trove-repo-contribution-opportunities-v1"
 const CONTRIBUTION_CACHE_TTL_MS = 60 * 60 * 1000
 
 interface RepoContributionResponse {

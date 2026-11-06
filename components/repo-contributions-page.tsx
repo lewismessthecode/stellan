@@ -78,8 +78,8 @@ interface ContributionBrief {
 type SelectableDifficulty = ContributionDifficulty | "all"
 type SelectableType = ContributionType | "all"
 
-const REPO_CONTRIBUTION_CACHE_PREFIX = "stardash-repo-contribution-opportunities-v1"
-const BRIEF_CACHE_PREFIX = "stardash-contribution-brief"
+const REPO_CONTRIBUTION_CACHE_PREFIX = "trove-repo-contribution-opportunities-v1"
+const BRIEF_CACHE_PREFIX = "trove-contribution-brief"
 const CACHE_TTL_MS = 60 * 60 * 1000
 const BRIEF_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000
 

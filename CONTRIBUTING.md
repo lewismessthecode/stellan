@@ -1,4 +1,4 @@
-# Contributing to StarDash
+# Contributing to Trove
 
 Thank you for considering a contribution! This document outlines how to get set up and what to expect.
 
@@ -8,17 +8,16 @@ Thank you for considering a contribution! This document outlines how to get set 
 
 ### Prerequisites
 
-- Node.js 20+
-- `pnpm`
-- A Supabase project with GitHub OAuth configured (see [Self-Hosting docs](./README.md#-self-hosting))
+- Node.js 22.5 or later
+- pnpm
 
 ### Local setup
 
 ```bash
-git clone https://github.com/boffti/stardash.git
-cd stardash
+git clone https://github.com/lewismessthecode/stellan.git
+cd stellan
 pnpm install
-cp .env.example .env.local   # fill in your keys
+cp .env.example .env.local
 pnpm dev
 ```
 
@@ -63,7 +62,7 @@ pnpm dev
 
 ## Reporting bugs
 
-Open an [issue](https://github.com/boffti/stardash/issues) and include:
+Open an [issue](https://github.com/lewismessthecode/stellan/issues) and include:
 
 - Steps to reproduce
 - Expected vs. actual behaviour
@@ -73,7 +72,7 @@ Open an [issue](https://github.com/boffti/stardash/issues) and include:
 
 ## Feature requests
 
-Open a [discussion](https://github.com/boffti/stardash/discussions) before submitting a feature PR so we can agree on scope and approach.
+Open an [issue](https://github.com/lewismessthecode/stellan/issues) before a feature PR so we can agree on scope.
 
 ---
 

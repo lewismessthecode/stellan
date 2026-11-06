@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from "framer-motion"
 import { Circle } from "lucide-react"
+import { APP_NAME } from "@/lib/brand"
 import { cn } from "@/lib/utils"
 
 const SHAPE_EASE = [0.23, 0.86, 0.39, 0.96] as const
@@ -74,7 +75,7 @@ function ElegantShape({
 }
 
 export function HeroGeometric({
-  badge = "StarDash",
+  badge = APP_NAME,
   title1 = "Your GitHub Stars,",
   title2 = "Organized",
   children,

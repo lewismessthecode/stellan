@@ -1,18 +1,29 @@
 #!/usr/bin/env node
-// StarDash CLI: agent tokens and MCP client config, straight against the SQLite file.
-// Works from a checkout (DATABASE_PATH defaults to ./data/stardash.db) and inside the
-// container: `docker exec stardash node bin/stardash.mjs token claude-code`.
 import { DatabaseSync } from "node:sqlite"
 import { createHash, randomBytes } from "node:crypto"
+import { existsSync, renameSync } from "node:fs"
+import { basename, dirname, join } from "node:path"
 
 const [cmd = "help", ...rest] = process.argv.slice(2)
-const path = process.env.DATABASE_PATH ?? "./data/stardash.db"
+const path = process.env.DATABASE_PATH ?? "./data/trove.db"
 const url = (process.env.APP_URL ?? `http://localhost:${process.env.PORT ?? 3000}`).replace(
   /\/$/,
   "",
 )
 
+function adoptLegacyDatabase(file) {
+  if (basename(file) !== "trove.db" || existsSync(file)) return
+  const legacy = join(dirname(file), "stardash.db")
+  if (!existsSync(legacy)) return
+  renameSync(legacy, file)
+  for (const suffix of ["-wal", "-shm"]) {
+    const from = legacy + suffix
+    if (existsSync(from)) renameSync(from, file + suffix)
+  }
+}
+
 const open = () => {
+  if (path !== ":memory:") adoptLegacyDatabase(path)
   const db = new DatabaseSync(path)
   db.exec("pragma busy_timeout = 5000")
   return db
@@ -29,7 +40,7 @@ const config = (token) =>
   JSON.stringify(
     {
       mcpServers: {
-        stardash: {
+        trove: {
           type: "http",
           url: `${url}/api/mcp`,
           headers: { Authorization: `Bearer ${token}` },
@@ -44,7 +55,7 @@ switch (cmd) {
   case "token": {
     const db = open()
     const { id: userId, github_username } = owner(db)
-    const token = `sd_${randomBytes(24).toString("hex")}`
+    const token = `trove_${randomBytes(24).toString("hex")}`
     const hash = createHash("sha256").update(token).digest("hex") // same as lib/api-tokens.ts
     db.prepare("insert into api_tokens (user_id, name, token_hash) values (?, ?, ?)").run(
       userId,
@@ -60,7 +71,7 @@ switch (cmd) {
     const rows = db
       .prepare("select id, name, created_at, last_used_at from api_tokens order by created_at desc")
       .all()
-    if (rows.length === 0) console.log("No tokens. Create one: stardash token <name>")
+    if (rows.length === 0) console.log("No tokens. Create one: trove token <name>")
     for (const r of rows)
       console.log(
         `${r.id}  ${r.name.padEnd(16)}  created ${r.created_at.slice(0, 10)}  last used ${r.last_used_at?.slice(0, 10) ?? "never"}`,
@@ -69,7 +80,7 @@ switch (cmd) {
   }
   case "revoke": {
     if (!rest[0]) {
-      console.error("Usage: stardash revoke <id>")
+      console.error("Usage: trove revoke <id>")
       process.exit(1)
     }
     const n = open().prepare("delete from api_tokens where id = ?").run(rest[0]).changes
@@ -77,15 +88,15 @@ switch (cmd) {
     break
   }
   case "mcp-config":
-    console.log(config(rest[0] ?? "<token from `stardash token`>"))
+    console.log(config(rest[0] ?? "<token from `trove token`>"))
     break
   default:
-    console.log(`stardash <command>
+    console.log(`trove <command>
 
   token [name]      Create a bearer token for MCP clients and print the client config
   tokens            List tokens
   revoke <id>       Revoke a token
   mcp-config [tok]  Print MCP client config for ${url}/api/mcp
 
-Env: DATABASE_PATH (default ./data/stardash.db), APP_URL, PORT`)
+Env: DATABASE_PATH (default ./data/trove.db), APP_URL, PORT`)
 }

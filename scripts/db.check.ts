@@ -104,11 +104,11 @@ console.log("session: ok")
 const tokens = await import("../lib/api-tokens")
 const made = tokens.createApiToken(user, "check")
 assert(
-  made.token.startsWith("sd_") && tokens.verifyApiToken(made.token) === user,
+  made.token.startsWith("trove_") && tokens.verifyApiToken(made.token) === user,
   "token verifies to owner",
 )
 assert(
-  tokens.verifyApiToken("sd_nope") === null && tokens.verifyApiToken(undefined) === null,
+  tokens.verifyApiToken("trove_nope") === null && tokens.verifyApiToken(undefined) === null,
   "bad tokens rejected",
 )
 assert(

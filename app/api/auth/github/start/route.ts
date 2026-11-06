@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import { appUrl, getGitHubApp, newState } from "@/lib/github-app"
 import { safeNext } from "@/lib/safe-next"
 
-export const OAUTH_STATE_COOKIE = "sd_oauth_state"
+export const OAUTH_STATE_COOKIE = "trove_oauth_state"
 
 export async function GET(request: Request) {
   const origin = appUrl(request)

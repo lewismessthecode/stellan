@@ -11,6 +11,7 @@ import {
   useState,
 } from "react"
 import { useRouter } from "next/navigation"
+import { APP_NAME } from "@/lib/brand"
 import {
   ArrowRight,
   Check,
@@ -188,7 +189,7 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
           showCloseButton={false}
         >
           <DialogHeader className="sr-only">
-            <DialogTitle>{t("Search Stellan", "搜索 Stellan")}</DialogTitle>
+            <DialogTitle>{t(`Search ${APP_NAME}`, `搜索 ${APP_NAME}`)}</DialogTitle>
             <DialogDescription>
               {t("Search pages and repositories.", "搜索页面和仓库。")}
             </DialogDescription>

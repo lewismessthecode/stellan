@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs"
+import { APP_NAME } from "@/lib/brand"
 import { Langfuse } from "langfuse"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   // 1. Send a test event to Sentry
-  Sentry.captureMessage("StarDash observability test — Sentry connected", "info")
+  Sentry.captureMessage(`${APP_NAME} observability test. Sentry connected`, "info")
 
   // 2. Send a test trace to Langfuse — explicit credentials to bypass env var issues
   const langfuseResult = { status: "unknown", error: null as string | null }

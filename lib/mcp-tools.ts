@@ -1,3 +1,4 @@
+import { APP_NAME } from "@/lib/brand"
 import { db, fromJson, toJson } from "@/lib/db"
 import { RADAR_ENABLED } from "@/lib/flags"
 import { starRepo as githubStar } from "@/lib/github"
@@ -226,9 +227,9 @@ export function radarAction(
 
 export async function starOnGitHub(userId: string, owner: string, repo: string) {
   const { token } = await getValidGitHubToken(userId)
-  if (!token) return { error: "No GitHub token for this user. Sign in to StarDash again." }
+  if (!token) return { error: `No GitHub token for this user. Sign in to ${APP_NAME} again.` }
   await githubStar(token, owner, repo)
-  return { ok: true, note: "Starred on GitHub. It appears in StarDash after the next sync." }
+  return { ok: true, note: `Starred on GitHub. It appears in ${APP_NAME} after the next sync.` }
 }
 
 export const json = (value: unknown) => toJson(value)

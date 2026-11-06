@@ -7,6 +7,7 @@ import useSWR from "swr"
 import { RADAR_ENABLED } from "@/lib/flags"
 import Link from "next/link"
 import { useI18n } from "@/components/i18n-provider"
+import { APP_NAME } from "@/lib/brand"
 import { usePathname } from "next/navigation"
 import {
   Sidebar,
@@ -143,7 +144,7 @@ export function AppSidebar({
           href="/dashboard"
           className="flex items-center gap-2 rounded-md outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <span className="text-sm font-semibold tracking-tight text-foreground">Stellan</span>
+          <span className="text-sm font-semibold tracking-tight text-foreground">{APP_NAME}</span>
         </Link>
       </SidebarHeader>
 

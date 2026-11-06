@@ -14,7 +14,7 @@ import type { StarredRepo } from "@/lib/types"
 // rank order, each with the model's one-line reason.
 
 const cacheKey = (userId: string, question: string) =>
-  `stardash-ask-${userId}:${question.toLowerCase()}`
+  `trove-ask-${userId}:${question.toLowerCase()}`
 
 function readCache(key: string): AskAnswer | undefined {
   try {

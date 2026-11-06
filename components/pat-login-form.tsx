@@ -1,14 +1,14 @@
 "use client"
 
 import { useI18n } from "@/components/i18n-provider"
+import { APP_NAME } from "@/lib/brand"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { AlertCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-const PAT_URL =
-  "https://github.com/settings/tokens/new?description=Stellan&scopes=public_repo,read:user,read:org"
+const PAT_URL = `https://github.com/settings/tokens/new?description=${encodeURIComponent(APP_NAME)}&scopes=public_repo,read:user,read:org`
 
 export function PatLoginForm({ next }: { next: string }) {
   const { t } = useI18n()

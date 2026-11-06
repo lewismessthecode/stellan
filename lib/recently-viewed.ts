@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import type { StarredRepo } from "@/lib/types"
 
 const RECENTLY_VIEWED_LIMIT = 24
-const RECENTLY_VIEWED_EVENT = "stardash:recently-viewed-updated"
+const RECENTLY_VIEWED_EVENT = "trove:recently-viewed-updated"
 
 export interface RecentlyViewedEntry {
   repo: StarredRepo
@@ -11,7 +11,7 @@ export interface RecentlyViewedEntry {
 }
 
 function storageKey(userId: string) {
-  return `stardash_recently_viewed_${userId}`
+  return `trove_recently_viewed_${userId}`
 }
 
 function isRecentlyViewedEntry(value: unknown): value is RecentlyViewedEntry {

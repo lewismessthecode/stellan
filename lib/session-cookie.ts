@@ -1,1 +1,1 @@
-export const SESSION_COOKIE = "sd_session"
+export const SESSION_COOKIE = "trove_session"

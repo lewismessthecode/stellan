@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# Single-container StarDash: Next.js standalone server + SQLite on a volume.
+# Single-container Trove: Next.js standalone server + SQLite on a volume.
 FROM node:24-slim AS base
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
@@ -14,7 +14,7 @@ RUN node node_modules/next/dist/bin/next build
 
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 DATABASE_PATH=/data/stardash.db
+ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 DATABASE_PATH=/data/trove.db
 RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs nextjs \
   && mkdir -p /data && chown nextjs:nodejs /data
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
